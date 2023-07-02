@@ -11,25 +11,21 @@ app.post("/calculate_ride", function (req, res) {
         segment.date = new Date(segment.date);
         if (!isValidDistance(segment)) return res.json({ price: -1 });
         if (!isValidDate(segment)) return res.json({ price: -2 });
-        if (isOvernight(segment)) {
-            if (!isSunday(segment)) {
-                price += segment.distance * 3.90;
-            } else {
-                price += segment.distance * 5;
-            }
-        } else {
-            if (isSunday(segment)) {
-                price += segment.distance * 2.9;
-            } else {
-                price += segment.distance * 2.10;
-            }
+        if (isOvernight(segment) && !isSunday(segment)) {
+            price += segment.distance * 3.90;
+        }
+        if (isOvernight(segment) && isSunday(segment)) {
+            price += segment.distance * 5;
+        }
+        if (!isOvernight(segment) && isSunday(segment)) {
+            price += segment.distance * 2.9;
+        }
+        if (!isOvernight(segment) && !isSunday(segment)) {
+            price += segment.distance * 2.10;
         }
     }
-    if (price < 10) {
-        price = 10;
-    }
+    price = price < 10 ? 10 : price;
     res.json({ price });
-    return;
 });
 
 app.listen(3000);
