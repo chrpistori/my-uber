@@ -4,55 +4,55 @@ const app = express();
 app.use(express.json());
 
 // calculate ride price
-app.post("/calc", function (req, res) { 
-    let result = 0;
+app.post("/calculate_ride", function (req, res) { 
+    let price = 0;
 
-    for (const mov of req.body) {
+    for (const segments of req.body.segments) {
 
-        mov.ds = new Date(mov.ds);
+        segments.date = new Date(segments.date);
 
-        if (mov.dist != null && mov.dist != undefined && typeof mov.dist === "number" && mov.dist > 0) {
+        if (segments.distance != null && segments.distance != undefined && typeof segments.distance === "number" && segments.distance > 0) {
 
-            if (mov.ds != null && mov.ds != undefined && mov.ds instanceof Date && mov.ds.toString() !== "Invalid Date") {
+            if (segments.date != null && segments.date != undefined && segments.date instanceof Date && segments.date.toString() !== "Invalid Date") {
 
                 //overnight
 
-                if (mov.ds.getHours() >= 22 || mov.ds.getHours() <= 6) {
+                if (segments.date.getHours() >= 22 || segments.date.getHours() <= 6) {
 
                         //not sunday
-                    if (mov.ds.getDay() !== 0) {
+                    if (segments.date.getDay() !== 0) {
 
-                        result += mov.dist * 3.90;
+                        price += segments.distance * 3.90;
                         // sunday
                     } else {
-                        result += mov.dist * 5;
+                        price += segments.distance * 5;
                     }
                 } else {
                     // sunday
-                    if (mov.ds.getDay() === 0) {
+                    if (segments.date.getDay() === 0) {
                         
-                        result += mov.dist * 2.9;
+                        price += segments.distance * 2.9;
 
                     } else {
-                        result += mov.dist * 2.10;
+                        price += segments.distance * 2.10;
                     }
                 }
             } else {
                 // console.log();
-                res.json({ result: -2 });
+                res.json({ price: -2 });
                 return;
             }
         } else {
-            // console.log(req.body.dist);
+            // console.log(req.body.distance);
 
-            res.json({ result: -1 });
+            res.json({ price: -1 });
             return;
         }
     }
-    if (result < 10) {
-        result = 10;
+    if (price < 10) {
+        price = 10;
     }
-    res.json({ result });
+    res.json({ price });
     return;
 });
 
