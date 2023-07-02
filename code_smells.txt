@@ -1,0 +1,20 @@
+Code Smells:
+
+1. Nomes ruins: 
+
+    É um nome de variável, método, classe, arquivo não suficientemente claro.
+
+    Técnica de refactoring: renomear variável, método, classe, arquivo não suficientemente claro.
+
+2. Linhas em branco: 
+    não tem utilidade, não serve para organizar o código, cada um usa de um jeito
+
+3. Comentários: 
+    quando há muitos comentários ou código morto, é um sinal claro de código mal escrito. Pode ser substituído por uma variável explicativa ou extraindo em métodos
+
+4. Condições confusas e aninhadas: 
+    introduzir cláusulas de guarda (inverter as condições para tentar eliminar o else), extrair condições
+
+5. Tratamento inadequado de erros ou exceções: 
+
+6. Números mágicos:
