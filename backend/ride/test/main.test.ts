@@ -1,5 +1,4 @@
 import axios from "axios";
-import { response } from "express";
 
 test("Deve fazer o cálculo do preço de uma corrida durante o dia", async function () {
     // given or arrange

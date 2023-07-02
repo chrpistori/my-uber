@@ -1,18 +1,10 @@
 // @ts-nocheck
 import express from "express";
+import { isOvernight, isSunday } from "./RideCalculator";
 const app = express();
 
 app.use(express.json());
 
-function isOvernight (segment) {
-    return segment.date.getHours() >= 22 || segment.date.getHours() <= 6;
-}
-
-function isSunday (segment) {
-    return segment.date.getDay() === 0;
-}
-
-// calculate ride price
 app.post("/calculate_ride", function (req, res) { 
     let price = 0;
     for (const segment of req.body.segments) {
