@@ -15,7 +15,10 @@ Code Smells:
 
 
 3. Comentários: 
-    quando há muitos comentários ou código morto, é um sinal claro de código mal escrito. Pode ser substituído por uma variável explicativa ou extraindo em métodos
+    
+    Quando há muitos comentários ou código morto, é um sinal claro de código mal escrito. 
+    
+    Técnica de refactoring: substituir por uma variável explicativa ou extrair em métodos e funções
 
 
 4. Condições confusas e aninhadas: 
