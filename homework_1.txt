@@ -1,0 +1,29 @@
+Etapa 1:
+
+Use Case: Calcular o preço da corrida
+
+    url: /calculate_ride_price
+    method: POST
+    input: distance, date
+    output: price
+
+Use Case: Cadastrar passageiro
+
+    url: /passengers
+    method: POST
+    input: name, email, document
+    output: passenger_id (uuid)
+
+Use Case: Cadastrar motorista
+
+    url: /drivers
+    method: POST
+    input: name, email, document, car plate
+    output: drive_id (uuid)
+
+
+Considerações:
+
+1 - O documento, do tipo cpf, deve ser validado utilizando o algoritmo fornecido, que deve ser refatorado. O código-fonte está disponível em https://github.com/rodrigobranas/cccat12_1/blob/master/backend/ride/src/cpf.ts
+2 - Crie uma API para receber as requisições
+3 - Utilize um banco de dados de sua preferência para persistir os dados
