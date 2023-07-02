@@ -22,7 +22,10 @@ Code Smells:
 
 
 4. Condições confusas e aninhadas: 
-    introduzir cláusulas de guarda (inverter as condições para tentar eliminar o else), extrair condições
+
+    Quando as conclusões não estão muito claras e organizadas.
+
+    Técnica de refactoring: introduzir cláusulas de guarda (inverter as condições para tentar eliminar o else - Early Return Principle), extrair condições
 
 
 5. Tratamento inadequado de erros ou exceções: 
