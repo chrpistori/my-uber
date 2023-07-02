@@ -4,26 +4,32 @@ const app = express();
 
 app.use(express.json());
 
+function isOvernight (segment) {
+    return segment.date.getHours() >= 22 || segment.date.getHours() <= 6;
+}
+
+function isSunday (segment) {
+    return segment.date.getDay() === 0;
+}
+
 // calculate ride price
 app.post("/calculate_ride", function (req, res) { 
     let price = 0;
-    for (const segments of req.body.segments) {
-        segments.date = new Date(segments.date);
-        if (segments.distance != null && segments.distance != undefined && typeof segments.distance === "number" && segments.distance > 0) {
-            if (segments.date != null && segments.date != undefined && segments.date instanceof Date && segments.date.toString() !== "Invalid Date") {
-                const isOvernight = segments.date.getHours() >= 22 || segments.date.getHours() <= 6;
-                const isSunday = segments.date.getDay() === 0;
-                if (isOvernight) {
-                    if (!isSunday) {
-                        price += segments.distance * 3.90;
+    for (const segment of req.body.segments) {
+        segment.date = new Date(segment.date);
+        if (segment.distance != null && segment.distance != undefined && typeof segment.distance === "number" && segment.distance > 0) {
+            if (segment.date != null && segment.date != undefined && segment.date instanceof Date && segment.date.toString() !== "Invalid Date") {
+                if (isOvernight(segment)) {
+                    if (!isSunday(segment)) {
+                        price += segment.distance * 3.90;
                     } else {
-                        price += segments.distance * 5;
+                        price += segment.distance * 5;
                     }
                 } else {
-                    if (isSunday) {
-                        price += segments.distance * 2.9;
+                    if (isSunday(segment)) {
+                        price += segment.distance * 2.9;
                     } else {
-                        price += segments.distance * 2.10;
+                        price += segment.distance * 2.10;
                     }
                 }
             } else {
