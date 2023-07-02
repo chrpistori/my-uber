@@ -32,10 +32,26 @@ app.post("/calc", function (req, res) {
                         // sunday
                         if (mov.ds.getDay() === 0) {
                             
+                            result += mov.dist * 2.9;
+
+                        } else {
+                            result += mov.dist * 2.10;
                         }
                     }
+                } else {
+                    // console.log();
+                    res.json({ result: -2 });
+                    return;
                 }
+            } else {
+                // console.log(req.body.dist);
+
+                res.json({ result: -1 });
+                return;
             }
         }
+    }
+    if (result < 10) {
+        result = 10;
     }
 });
