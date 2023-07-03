@@ -58,3 +58,12 @@ test("Deve fazer o cálculo do preço de uma corrida durante o dia com preço m�
     const price = calculate(segments);
     expect(price).toBe(10);
 });
+
+test("Deve fazer o cálculo do preço de uma corrida com múltiplos segmentos", function () {
+    const segments = [
+        { distance: 10, date: new Date("2021-03-01T10:00:00")},
+        { distance: 10, date: new Date("2021-03-01T12:00:00")}
+    ];
+    const price = calculate(segments);
+    expect(price).toBe(42);
+});
