@@ -1,43 +1,49 @@
 // @ts-nocheck
+function isCpfValid (cpf) {
+    return cpf && cpf.length >= 11 && cpf.length <= 14 && !hasAllDigitsEqual(cpf);
+}
+
+function hasAllDigitsEqual (cpf) {
+    return cpf.split("").every(digit => digit === cpf[0]);
+}
+
+function calculateRest (digit) {
+    return digit % 11;
+}
+
+function calculateFinalDigit (rest) {
+    return rest < 2 ? 0 : 11 - rest;
+}
+
+function calculateSecondDigit (digit2, finalDigit1) {
+    return digit2 + 2 * finalDigit1;
+}
+
 export function validate (cpf) {
-	if (cpf !== null) {
-        if (cpf !== undefined) {
-            if (cpf.length >= 11 || cpf.length <= 14){
-                cpf=cpf
-                    .replace('.','')
-                    .replace('.','')
-                    .replace('-','')
-                    .replace(" ","");
-                if (!cpf.split("").every(digito => digito === cpf[0])) {
-                    try{
-                        let digito1, digito2;
-                        let digito1_final, digito2_final, resto;
-                        let digito_auxiliar;
-                        let digitoVerificadorCalculado;
-                        digito1 = digito2 = 0;
-                        digito1_final = digito2_final = resto = 0;
-                        for (let iteradorDeDigitos = 1; iteradorDeDigitos < cpf.length -1; iteradorDeDigitos++) {
-                            digito_auxiliar = parseInt(cpf.substring(iteradorDeDigitos -1, iteradorDeDigitos));
-                            digito1 = digito1 + ( 11 - iteradorDeDigitos ) * digito_auxiliar;
-                            digito2 = digito2 + ( 12 - iteradorDeDigitos ) * digito_auxiliar;
-                        };
-                        resto = (digito1 % 11);
-                        digito1_final = (resto < 2) ? digito1_final = 0 : 11 - resto;
-                        digito2 += 2 * digito1_final;
-                        resto = (digito2 % 11);
-                        if (resto < 2)
-                            digito2_final = 0;
-                        else
-                            digito2_final = 11 - resto;
-                        let digitoVerificadorFornecido = cpf.substring(cpf.length-2, cpf.length);
-                        digitoVerificadorCalculado = "" + digito1_final + "" + digito2_final;
-                        return digitoVerificadorFornecido == digitoVerificadorCalculado;
-                    } catch (e) {
-                        console.error("Erro !"+e);
-                        return false;
-                    }
-                } else return false;
-            } else return false;
-        }
-	} else return false;
+	if (!isCpfValid(cpf)) return false;
+    cpf=cpf
+        .replace('.','')
+        .replace('.','')
+        .replace('-','')
+        .replace(" ","");
+    try{
+        let [digit1, digit2, finalDigit1, finalDigit2, rest, auxiliarDigit] = [0, 0, 0, 0, 0, 0];
+
+        for (let digitsIterator = 1; digitsIterator < cpf.length -1; digitsIterator++) {
+            auxiliarDigit = parseInt(cpf.substring(digitsIterator -1, digitsIterator));
+            digit1 = digit1 + ( 11 - digitsIterator ) * auxiliarDigit;
+            digit2 = digit2 + ( 12 - digitsIterator ) * auxiliarDigit;
+        };
+        rest = calculateRest(digit1);
+        finalDigit1 = calculateFinalDigit(rest);
+        digit2 = calculateSecondDigit(digit2, finalDigit1);
+        rest = calculateRest(digit2);
+        finalDigit2 = calculateFinalDigit(rest);
+        const providedVerifierDigit = cpf.substring(cpf.length-2, cpf.length);
+        const calculatedVerifierDigit = "" + finalDigit1 + "" + finalDigit2;
+        return providedVerifierDigit == calculatedVerifierDigit;
+    } catch (e) {
+        console.error("Erro !"+e);
+        return false;
+    }
 }
