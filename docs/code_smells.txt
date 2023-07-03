@@ -34,6 +34,8 @@ Code Smells:
 
 5. Tratamento inadequado de erros ou exceções: 
 
+    Técnica de refactoring: tratar adequadamente os erros ou exceções
+
 
 6. Números mágicos:
 
