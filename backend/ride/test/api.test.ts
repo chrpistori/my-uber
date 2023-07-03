@@ -4,7 +4,7 @@ test("Deve fazer o cálculo do preço de uma corrida durante o dia", async funct
     // given or arrange
     const input = {
         segments: [
-            { distance: 10, date: "2021-03-01T10:00:00" }
+            { distance: 10, date: "2021-03-02T10:00:00" }
         ]
     };
     // when or act
