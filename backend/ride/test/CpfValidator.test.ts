@@ -12,11 +12,6 @@ test("Deve informar que o CPF informado é inválido", function () {
     expect(result).toBeFalsy();
 });
 
-test("Deve informar que o CPF informado é inválido porque tem todos os dígitos iguais", function () {
-    const myTestFunction = () => new CpfValidator("88888888888");
-    expect(myTestFunction).toThrow(new Error("Invalid CPF - All numbers are equal. Please try again."))
-});
-
 test("Deve informar que o CPF informado com caracteres da máscara é um CPF válido.", function () {
     const cpfValidator = new CpfValidator("635.656.769-49");
     const result = cpfValidator.validate();
@@ -33,6 +28,11 @@ test("Deve informar que o CPF informado é composto apenas por números.", funct
     const cpfValidator = new CpfValidator("079.598.739-09");
     const result = cpfValidator.validate();
     expect(result).toBeTruthy();
+});
+
+test("Deve informar que o CPF informado é inválido porque tem todos os dígitos iguais", function () {
+    const myTestFunction = () => new CpfValidator("88888888888");
+    expect(myTestFunction).toThrow(new Error("Invalid CPF - All numbers are equal. Please try again."))
 });
 
 test("Deve informar que o CPF informado não é composto apenas por números.", function () {
