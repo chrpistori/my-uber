@@ -1,49 +1,77 @@
 // @ts-nocheck
 function isCpfValid (cpf) {
-    return cpf && cpf.length >= 11 && cpf.length <= 14 && !hasAllDigitsEqual(cpf);
+    return cpf && cpf.length >= 11 && cpf.length <= 14;
 }
 
 function hasAllDigitsEqual (cpf) {
     return cpf.split("").every(digit => digit === cpf[0]);
 }
 
+function isCpfValidNumber (cpf) {
+    return !isNaN(cpf);
+}
+
 function calculateRest (digit) {
     return digit % 11;
+}
+
+function calculateFirstFinalDigit (firstDigit) {
+    let rest = calculateRest(firstDigit)
+    return calculateFinalDigit(rest);
+}
+
+function calculateSecondFinalDigit (secondDigit, firstFinalDigit) {
+    let rest = calculateRest(calculateSecondDigit(secondDigit, firstFinalDigit));
+    return calculateFinalDigit(rest);
 }
 
 function calculateFinalDigit (rest) {
     return rest < 2 ? 0 : 11 - rest;
 }
 
-function calculateSecondDigit (digit2, finalDigit1) {
-    return digit2 + 2 * finalDigit1;
+function calculateSecondDigit (secondDigit, firstFinalDigit) {
+    return secondDigit + 2 * firstFinalDigit;
 }
 
-export function validate (cpf) {
-	if (!isCpfValid(cpf)) return false;
-    cpf=cpf
-        .replace('.','')
-        .replace('.','')
-        .replace('-','')
-        .replace(" ","");
-    try{
-        let [digit1, digit2, finalDigit1, finalDigit2, rest, auxiliarDigit] = [0, 0, 0, 0, 0, 0];
+function removeMaskCharacters(cpf) {
+    return cpf.replace(/[.-\s]/g, '');
+}
 
-        for (let digitsIterator = 1; digitsIterator < cpf.length -1; digitsIterator++) {
-            auxiliarDigit = parseInt(cpf.substring(digitsIterator -1, digitsIterator));
-            digit1 = digit1 + ( 11 - digitsIterator ) * auxiliarDigit;
-            digit2 = digit2 + ( 12 - digitsIterator ) * auxiliarDigit;
-        };
-        rest = calculateRest(digit1);
-        finalDigit1 = calculateFinalDigit(rest);
-        digit2 = calculateSecondDigit(digit2, finalDigit1);
-        rest = calculateRest(digit2);
-        finalDigit2 = calculateFinalDigit(rest);
-        const providedVerifierDigit = cpf.substring(cpf.length-2, cpf.length);
-        const calculatedVerifierDigit = "" + finalDigit1 + "" + finalDigit2;
-        return providedVerifierDigit == calculatedVerifierDigit;
+function getProvidedVerifierDigit (cpf) {
+    return cpf.substring(cpf.length-2, cpf.length)
+}
+
+function concatenateCalculatedVerifierDigit(firstFinalDigit, secondFinalDigit) {
+    return `${firstFinalDigit}${secondFinalDigit}`;
+}
+
+function isVerifierDigitValid (cpf, firstFinalDigit, secondFinalDigit) {
+    const providedVerifierDigit = getProvidedVerifierDigit(cpf);
+    const calculatedVerifierDigit = concatenateCalculatedVerifierDigit(firstFinalDigit, secondFinalDigit);
+    return providedVerifierDigit == calculatedVerifierDigit;
+}
+
+function calculateDigits(cpf) {
+    let [firstDigit, secondDigit] = [0, 0];
+    for (let digitsIterator = 1; digitsIterator < cpf.length - 1; digitsIterator++) {
+      const auxiliarDigit = parseInt(cpf.substring(digitsIterator - 1, digitsIterator));
+      firstDigit += (11 - digitsIterator) * auxiliarDigit;
+      secondDigit += (12 - digitsIterator) * auxiliarDigit;
+    }
+    return [firstDigit, secondDigit];
+  }
+
+export function validate (cpf) {
+	if (!isCpfValid(cpf) || hasAllDigitsEqual(cpf)) return false;
+    cpf = removeMaskCharacters(cpf);
+    if (!isCpfValidNumber(cpf)) return false;
+    try{
+        const [firstDigit, secondDigit] = calculateDigits(cpf);
+        const firstFinalDigit = calculateFirstFinalDigit(firstDigit);
+        const secondFinalDigit = calculateSecondFinalDigit(secondDigit, firstFinalDigit);
+        return isVerifierDigitValid(cpf, firstFinalDigit, secondFinalDigit);
     } catch (e) {
-        console.error("Erro !"+e);
+        console.error("Erro: "+e);
         return false;
     }
 }
