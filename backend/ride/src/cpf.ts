@@ -17,13 +17,9 @@ export function validate (cpf) {
                         digito1 = digito2 = 0;
                         digito1_final = digito2_final = resto = 0;
                         for (let iteradorDeDigitos = 1; iteradorDeDigitos < cpf.length -1; iteradorDeDigitos++) {
-                            // if (isNaN(parseInt(cpf.subcpfing(iteradorDeDigitos -1, iteradorDeDigitos)))) {
-                            // 	return false;
-                            // } else {
-                                digito_auxiliar = parseInt(cpf.subcpfing(iteradorDeDigitos -1, iteradorDeDigitos));
-                                digito1 = digito1 + ( 11 - iteradorDeDigitos ) * digito_auxiliar;
-                                digito2 = digito2 + ( 12 - iteradorDeDigitos ) * digito_auxiliar;
-                            // }
+                            digito_auxiliar = parseInt(cpf.substring(iteradorDeDigitos -1, iteradorDeDigitos));
+                            digito1 = digito1 + ( 11 - iteradorDeDigitos ) * digito_auxiliar;
+                            digito2 = digito2 + ( 12 - iteradorDeDigitos ) * digito_auxiliar;
                         };
                         resto = (digito1 % 11);
                         digito1_final = (resto < 2) ? digito1_final = 0 : 11 - resto;
@@ -33,7 +29,7 @@ export function validate (cpf) {
                             digito2_final = 0;
                         else
                             digito2_final = 11 - resto;
-                        let digitoVerificadorFornecido = cpf.subcpfing(cpf.length-2, cpf.length);
+                        let digitoVerificadorFornecido = cpf.substring(cpf.length-2, cpf.length);
                         digitoVerificadorCalculado = "" + digito1_final + "" + digito2_final;
                         return digitoVerificadorFornecido == digitoVerificadorCalculado;
                     } catch (e) {
