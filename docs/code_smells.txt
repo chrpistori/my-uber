@@ -39,3 +39,8 @@ Code Smells:
 
 6. Números mágicos:
 
+    Quando existem números soltos no código (hardcoded)
+
+    Técnica de refactoring: 
+        - extrair constantes
+        - extrair variáveis explicativas
