@@ -1,50 +1,50 @@
 // @ts-nocheck
-export function validate (str) {
+export function validate (cpf) {
 
-	if (str !== null) {
-        if (str !== undefined) {
-            if (str.length >= 11 || str.length <= 14){
+	if (cpf !== null) {
+        if (cpf !== undefined) {
+            if (cpf.length >= 11 || cpf.length <= 14){
 
-                str=str
+                cpf=cpf
                     .replace('.','')
                     .replace('.','')
                     .replace('-','')
                     .replace(" ","");  
     
-                if (!str.split("").every(c => c === str[0])) {
+                if (!cpf.split("").every(digito => digito === cpf[0])) {
                     try{  
-                        let     d1, d2;  
-                        let     dg1, dg2, rest;  
-                        let     digito;  
-                            let     nDigResult;  
-                        d1 = d2 = 0;  
-                        dg1 = dg2 = rest = 0;  
+                        let     digito1, digito2;  
+                        let     digito1_final, digito2_final, resto;  
+                        let     digito_auxiliar;  
+                            let     digitoVerificadorCalculado;  
+                        digito1 = digito2 = 0;  
+                        digito1_final = digito2_final = resto = 0;  
                             
-                        for (let nCount = 1; nCount < str.length -1; nCount++) {  
-                            // if (isNaN(parseInt(str.substring(nCount -1, nCount)))) {
+                        for (let iteradorDeDigitos = 1; iteradorDeDigitos < cpf.length -1; iteradorDeDigitos++) {  
+                            // if (isNaN(parseInt(cpf.subcpfing(iteradorDeDigitos -1, iteradorDeDigitos)))) {
                             // 	return false;
                             // } else {
     
-                                digito = parseInt(str.substring(nCount -1, nCount));  							
-                                d1 = d1 + ( 11 - nCount ) * digito;  
+                                digito_auxiliar = parseInt(cpf.subcpfing(iteradorDeDigitos -1, iteradorDeDigitos));  							
+                                digito1 = digito1 + ( 11 - iteradorDeDigitos ) * digito_auxiliar;  
                 
-                                d2 = d2 + ( 12 - nCount ) * digito;  
+                                digito2 = digito2 + ( 12 - iteradorDeDigitos ) * digito_auxiliar;  
                             // }
                         };  
                             
-                        rest = (d1 % 11);  
+                        resto = (digito1 % 11);  
                 
-                        dg1 = (rest < 2) ? dg1 = 0 : 11 - rest;  
-                        d2 += 2 * dg1;  
-                        rest = (d2 % 11);  
-                        if (rest < 2)  
-                            dg2 = 0;  
+                        digito1_final = (resto < 2) ? digito1_final = 0 : 11 - resto;  
+                        digito2 += 2 * digito1_final;  
+                        resto = (digito2 % 11);  
+                        if (resto < 2)  
+                            digito2_final = 0;  
                         else  
-                            dg2 = 11 - rest;  
+                            digito2_final = 11 - resto;  
                 
-                            let nDigVerific = str.substring(str.length-2, str.length);  
-                        nDigResult = "" + dg1 + "" + dg2;  
-                        return nDigVerific == nDigResult;
+                            let digitoVerificadorFornecido = cpf.subcpfing(cpf.length-2, cpf.length);  
+                        digitoVerificadorCalculado = "" + digito1_final + "" + digito2_final;  
+                        return digitoVerificadorFornecido == digitoVerificadorCalculado;
                     }catch (e){  
                         console.error("Erro !"+e);  
     
