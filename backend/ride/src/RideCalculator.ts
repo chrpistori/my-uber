@@ -15,12 +15,20 @@ function isValidDate (segment) {
     return segment.date != null && segment.date != undefined && segment.date instanceof Date && segment.date.toString() !== "Invalid Date";
 }
 
+function isFirstDayOfMonth (segment) {
+    return segment.date.getDate() === 1;
+}
+
 export function calculate (segments) {
     let price = 0;
     for (const segment of segments) {
         segment.date = new Date(segment.date);
         if (!isValidDistance(segment)) return -1;
         if (!isValidDate(segment)) return -2;
+        if (isFirstDayOfMonth(segment)) {
+            price += segment.distance * 3;
+            continue;
+        }
         if (isOvernight(segment) && !isSunday(segment)) {
             price += segment.distance * 3.90;
         }

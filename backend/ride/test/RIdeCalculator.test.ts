@@ -3,7 +3,7 @@ import { calculate } from "../src/RideCalculator";
 test("Deve fazer o cálculo do preço de uma corrida durante o dia", function () {
     // given or arrange
     const segments = [
-        { distance: 10, date: new Date("2021-03-01T10:00:00") }
+        { distance: 10, date: new Date("2021-03-02T10:00:00") }
     ];
     // when or act
     const price = calculate(segments);
@@ -13,7 +13,7 @@ test("Deve fazer o cálculo do preço de uma corrida durante o dia", function ()
 
 test("Deve fazer o cálculo do preço de uma corrida durante a noite", function () {
     const segments = [
-        { distance: 10, date: new Date("2021-03-01T23:00:00") }
+        { distance: 10, date: new Date("2021-03-02T23:00:00") }
     ];
     const price = calculate(segments);
     expect(price).toBe(39);
@@ -53,7 +53,7 @@ test("Deve retornar -2 se a data for inválida", function () {
 
 test("Deve fazer o cálculo do preço de uma corrida durante o dia com preço mínimo", function () {
     const segments = [
-        { distance: 3, date: new Date("2021-03-01T10:00:00")}
+        { distance: 3, date: new Date("2021-03-02T10:00:00")}
     ];
     const price = calculate(segments);
     expect(price).toBe(10);
@@ -61,9 +61,17 @@ test("Deve fazer o cálculo do preço de uma corrida durante o dia com preço m�
 
 test("Deve fazer o cálculo do preço de uma corrida com múltiplos segmentos", function () {
     const segments = [
-        { distance: 10, date: new Date("2021-03-01T10:00:00")},
-        { distance: 10, date: new Date("2021-03-01T12:00:00")}
+        { distance: 10, date: new Date("2021-03-02T10:00:00")},
+        { distance: 10, date: new Date("2021-03-02T12:00:00")}
     ];
     const price = calculate(segments);
     expect(price).toBe(42);
+});
+
+test("Deve fazer o cálula do preço de uma corrida quando é o primeiro dia do mês", function () {
+    const segments = [
+        { distance: 10, date: new Date("2021-03-01T10:00:00")}
+    ];
+    const price = calculate(segments);
+    expect(price).toBe(30);
 });
