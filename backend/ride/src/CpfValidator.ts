@@ -1,23 +1,34 @@
-// @ts-nocheck
-import CpfUtils from "./CpfUtils";
-import CpfCalculator from "./CpfCalculator";
+function clean (cpf: string) {
+	return cpf.replace(/\D/g, "");
+}
 
-export default class CpfValidator {
-  cpfUtils: CpfUtils;
-  cpfCalculator: CpfCalculator; 
-  validCpf: string;
-  cpf: string;
+function isValidLength (cpf: string) {
+	return cpf.length !== 11;
+}
 
-  constructor (readonly cpf: string) {
-    this.cpfUtils = new CpfUtils(this.cpf);
-    this.validCpf = this.cpfUtils.removeMaskCharacters();
-  }
+function hasAllDigitsEqual (cpf: string) {
+	const [firstDigit] = cpf;
+	return [...cpf].every(digit => digit === firstDigit);
+}
 
-  validate () {
-      this.cpfCalculator = new CpfCalculator(this.validCpf);
-      const [firstDigit, secondDigit] = this.cpfCalculator.calculateDigits();
-      const firstFinalDigit = this.cpfCalculator.calculateFirstFinalDigit(firstDigit);
-      const secondFinalDigit = this.cpfCalculator.calculateSecondFinalDigit(secondDigit, firstFinalDigit);
-      return this.cpfCalculator.isVerifierDigitValid(firstFinalDigit, secondFinalDigit);
-  }
+function extractCheckDigit (cpf: string) {
+	return cpf.slice(9);
+}
+
+function calculateDigit (cpf: string, factor: number) {
+	let total = 0;
+	for (const digit of cpf) {
+		if (factor > 1) total += parseInt(digit) * factor--;
+	}
+	const rest = total%11;
+	return (rest < 2) ? 0 : 11 - rest;
+}
+
+export function validate (cpf: string) {
+	cpf = clean(cpf);
+	if (isValidLength(cpf)) return false;  
+	if (hasAllDigitsEqual(cpf)) return false;
+	const dg1 = calculateDigit(cpf, 10);
+	const dg2 = calculateDigit(cpf, 11);
+	return extractCheckDigit(cpf) == `${dg1}${dg2}`;
 }
